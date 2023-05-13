@@ -3,7 +3,7 @@ locals {
 }
 
 module "spacelift" {
-  source = "git@github.com:cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stack?ref=chore/cleanup-stack-module"
+  source = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stack?ref=chore/cleanup-stack-module"
   #version = "0.55.0"
   # https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git
   stack_name       = var.stack_name
