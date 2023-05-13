@@ -12,4 +12,5 @@ module "spacelift" {
   atmos_stack_name = var.atmos_stack_name
   component_name   = var.component_name
   component_root   = var.component_root
+  manage_state     = true
 }
