@@ -1,0 +1,16 @@
+import:
+  - mixins/region/global-region
+  - orgs/mcal/core/auto/_defaults
+
+components:
+  terraform:
+    spacelift/stack/root-admin:
+      metadata:
+        component: spacelift/stack
+      vars:
+        administrative: true
+        stack_name: root-admin
+        atmos_stack_name: root-admin
+        repository: infra-live
+        component_name: spacelift/stack
+        component_root: components/terraform/spacelift/stack

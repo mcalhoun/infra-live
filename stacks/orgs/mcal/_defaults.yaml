@@ -1,0 +1,37 @@
+vars:
+  namespace: mcal
+
+terraform:
+  settings:
+    spacelift:
+      # enable spacelift by default
+      workspace_enabled: true
+  backend_type: s3
+  backend:
+    s3:
+      bucket: example-state-bucket
+      dynamodb_table: example-state-locks
+      encrypt: true
+      key: terraform.tfstate
+      acl: bucket-owner-full-control
+      region: us-east-2
+  vars:
+    label_order:
+      - namespace
+      - tenant
+      - environment
+      - stage
+      - name
+      - attributes
+    descriptor_formats:
+      account_name:
+        format: "%v-%v"
+        labels:
+          - tenant
+          - stage
+      stack:
+        format: "%v-%v-%v"
+        labels:
+          - tenant
+          - environment
+          - stage

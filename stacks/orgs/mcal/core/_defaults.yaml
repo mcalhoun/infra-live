@@ -1,0 +1,5 @@
+import:
+  - orgs/mcal/_defaults
+
+vars:
+  tenant: core
