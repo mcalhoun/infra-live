@@ -7,6 +7,7 @@
 .terraform
 .terraform.tfstate.lock.info
 **/.terraform.lock.hcl
+backend.tf.json
 
 **/.idea
 **/*.iml
@@ -18,3 +19,5 @@
 # Crash log files
 crash.log
 test.log
+
+.DS_Store

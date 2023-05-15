@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Add -x for troubleshooting
+set -ex -o pipefail
+
+# Link the default terraform binary to Spacelift's Terraform installation path of `/bin/terraform`.
+# Because the Terraform command is executed as just `terraform` by `atmos` (unless otherwise specified)
+# and in scripts, and the default PATH has `/usr/bin` before `/bin`,
+# plain 'terraform' would otherwise resolve to the Docker container's
+# chosen version of Terraform, not Spacelift's configured version.
+
+ln -sfTv /bin/terraform /usr/bin/terraform
+echo "Using Terraform: "
+which terraform
+terraform version
+
+# Remove -x for security
+set -e +x

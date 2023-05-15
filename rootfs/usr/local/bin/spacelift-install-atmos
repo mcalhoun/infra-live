@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Add -x for troubleshooting
+set -ex -o pipefail
+
+# This should match the Dockerfile
+ATMOS_VERSION=1.35.0
+
+# Using `registry.hub.docker.com/cloudposse/geodesic:latest-debian` as Spacelift runner image on public worker pool
+apt-get update && apt-get install -y --allow-downgrades atmos="${ATMOS_VERSION}-*"
+
+# If runner image is Alpine Linux
+# apk add atmos@cloudposse~=${ATMOS_VERSION}
+
+
+# Copy the atmos CLI config file into the destination `/usr/local/etc/atmos` where all processes can see it
+mkdir -p /usr/local/etc/atmos
+cp /mnt/workspace/source/rootfs/usr/local/etc/atmos/atmos.yaml /usr/local/etc/atmos/atmos.yaml
+cat /usr/local/etc/atmos/atmos.yaml
+
+atmos version
+
+# Remove -x for security
+set -e +x

@@ -9,8 +9,11 @@ components:
         component: spacelift/stack
       vars:
         administrative: true
-        stack_name: root-admin
-        atmos_stack_name: root-admin
+        stack_name: infrastructure-root-admin
+        atmos_stack_name: core-gbl-auto-root-admin
         repository: infra-live
         component_name: spacelift/stack
         component_root: components/terraform/spacelift/stack
+        context_filters:
+          administrative: true
+
