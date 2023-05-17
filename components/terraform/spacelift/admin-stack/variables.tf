@@ -34,14 +34,20 @@ variable "after_plan" {
   default     = []
 }
 
-variable "atmos_stack_name" {
-  type        = string
-  description = "The name of the atmos stack"
-}
+# variable "atmos_stack_name" {
+#   type        = string
+#   description = "The name of the atmos stack"
+# }
 
 variable "autodeploy" {
   type        = bool
   description = "Controls the Spacelift 'autodeploy' option for a stack"
+  default     = false
+}
+
+variable "autoretry" {
+  type        = bool
+  description = "Controls the Spacelift 'autoretry' option for a stack"
   default     = false
 }
 
@@ -141,10 +147,10 @@ variable "component_env" {
   description = "Map of component ENV variables"
 }
 
-variable "component_name" {
-  type        = string
-  description = "The name of the concrete component (typically a directory name)"
-}
+# variable "component_name" {
+#   type        = string
+#   description = "The name of the concrete component (typically a directory name)"
+# }
 
 variable "component_root" {
   type        = string
@@ -327,4 +333,23 @@ variable "worker_pool_id" {
   type        = string
   description = "The immutable ID (slug) of the worker pool"
   default     = null
+}
+
+variable "context_filters" {
+  description = "Context filters to select atmos stacks matching specific criteria to create as children."
+  type = object({
+    namespaces          = optional(list(string), [])
+    environments        = optional(list(string), [])
+    tenants             = optional(list(string), [])
+    stages              = optional(list(string), [])
+    tags                = optional(map(string), {})
+    administrative      = optional(bool)
+    root_administrative = optional(bool)
+  })
+}
+
+variable "root_admin_stack" {
+  description = "Flag to indicate if this stack is the root admin stack. In this case, the stack will be created in the root space and will create all the other admin stacks as children."
+  type        = bool
+  default     = false
 }

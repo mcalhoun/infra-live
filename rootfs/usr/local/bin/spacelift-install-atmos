@@ -14,7 +14,7 @@ apt-get update && apt-get install -y --allow-downgrades atmos="${ATMOS_VERSION}-
 
 
 # Copy the atmos CLI config file into the destination `/usr/local/etc/atmos` where all processes can see it
-mkdir -p /usr/local/etc/atmos
+sudo mkdir -p /usr/local/etc/atmos
 cp /mnt/workspace/source/rootfs/usr/local/etc/atmos/atmos.yaml /usr/local/etc/atmos/atmos.yaml
 cat /usr/local/etc/atmos/atmos.yaml
 

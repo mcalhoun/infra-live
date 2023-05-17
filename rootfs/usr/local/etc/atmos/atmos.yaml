@@ -49,7 +49,7 @@ stacks:
   # Since we are distinguishing stacks based on namespace, and namespace is not part
   # of the stack name, we have to set `included_paths` via the ENV var in the Dockerfile
   included_paths:
-    - "orgs/**/*"
+    - "./orgs/**/*"
   # Can also be set using `ATMOS_STACKS_EXCLUDED_PATHS` ENV var (comma-separated values string)
   excluded_paths:
     - "**/_defaults.yaml"

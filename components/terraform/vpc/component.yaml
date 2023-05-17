@@ -1,0 +1,18 @@
+apiVersion: atmos/v1
+kind: ComponentVendorConfig
+metadata:
+  name: vpc-vendor-config
+  description: Source and mixins config for vendoring of 'vpc' component
+spec:
+  source:
+    uri: github.com/cloudposse/terraform-aws-components.git//modules/vpc?ref={{.Version}}
+    version: 1.90.2
+    included_paths:
+      - "**/*.tf"
+      - "**/*.tfvars"
+      - "**/*.md"
+    excluded_paths:
+      - "**/context.tf"
+  mixins:
+    - uri: ../../mixins/context.tf
+      filename: context.tf

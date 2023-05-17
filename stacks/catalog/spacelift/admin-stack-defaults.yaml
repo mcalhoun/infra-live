@@ -1,0 +1,31 @@
+components:
+  terraform:
+    spacelift/admin-stack/defaults:
+      metadata:
+        type: abstract
+        component: spacelift/admin-stack
+      settings:
+        spacelift:
+          administrative: true
+          autodeploy: true
+          before_apply:
+            - /mnt/workspace/source/rootfs/usr/local/bin/spacelift-configure-paths
+          before_init:
+            - /mnt/workspace/source/rootfs/usr/local/bin/spacelift-install-atmos
+            - /mnt/workspace/source/rootfs/usr/local/bin/spacelift-configure-paths
+            - /mnt/workspace/source/rootfs/usr/local/bin/spacelift-write-vars
+            - /mnt/workspace/source/rootfs/usr/local/bin/spacelift-tf-workspace
+          before_plan:
+            - /mnt/workspace/source/rootfs/usr/local/bin/spacelift-configure-paths
+          labels:
+            - admin
+            - folder:admin
+      vars:
+        administrative: true
+        branch: main
+        component_root: components/terraform
+        enabled: true
+        repository: infra-live
+        terraform_version: "1.3.9"
+        worker_pool_id: 01H0NQR7V7XQCMH6AZBW69J9MA
+

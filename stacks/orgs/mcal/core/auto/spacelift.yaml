@@ -1,19 +1,51 @@
 import:
   - mixins/region/global-region
   - orgs/mcal/core/auto/_defaults
+  - catalog/spacelift/worker-pool
+  - catalog/spacelift/admin-stack-defaults
 
 components:
   terraform:
+    spacelift/worker-pool:
+      vars:
+        ecr_repo_arn: arn:aws:ecr:us-east-2:552533042161:repository/mcalhoun/infra-live
+        ecr_repo_url: 552533042161.dkr.ecr.us-east-2.amazonaws.com/mcalhoun/infra-live
+        identity_account_id: 552533042161
+        vpc_id: vpc-07d82ff52c10f25e0
+        vpc_private_subnet_ids:
+          - subnet-0a5369040436a81ce
+
     spacelift/stack/root-admin:
       metadata:
-        component: spacelift/stack
+        component: spacelift/admin-stack
+        inherits:
+          - spacelift/admin-stack/defaults
+      settings:
+        spacelift:
+          root_administrative: true
+          labels:
+            - root-admin
+            - admin
       vars:
-        administrative: true
+        root_admin_stack: true
         stack_name: infrastructure-root-admin
-        atmos_stack_name: core-gbl-auto-root-admin
-        repository: infra-live
-        component_name: spacelift/stack
-        component_root: components/terraform/spacelift/stack
         context_filters:
-          administrative: true
+          administrative: true # This stack is managing all the other admin stacks
+          root_administrative: false # We don't want this stack to also find itself and add itself a second time
 
+    spacelift/stack/core-admin:
+      metadata:
+        component: spacelift/admin-stack
+        inherits:
+          - spacelift/admin-stack/defaults
+      vars:
+        context_filters:
+          namespace: core
+          administrative: false
+
+
+    myfoo:
+      metadata:
+        component: foo
+      vars:
+        some_var: foo
