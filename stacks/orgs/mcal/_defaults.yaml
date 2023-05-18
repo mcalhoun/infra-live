@@ -6,6 +6,15 @@ terraform:
     spacelift:
       # enable spacelift by default
       workspace_enabled: true
+      before_apply:
+        - spacelift-configure-paths
+      before_init:
+        - spacelift-configure-paths
+        - spacelift-write-vars
+        - spacelift-tf-workspace
+      before_plan:
+        - spacelift-configure-paths
+
   backend_type: s3
   backend:
     s3:
