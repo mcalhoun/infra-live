@@ -65,7 +65,7 @@ module "child_stack" {
   administrative   = try(each.value.settings.spacelift.administrative, false)
   repository       = var.repository
   space_id         = var.space_id
-  atmos_stack_name = each.key
+  atmos_stack_name = try(each.value.stack, null)
   component_name   = try(each.value.component, null)
   component_root   = try(join("/", [var.component_root, each.value.metadata.component]), null)
 
