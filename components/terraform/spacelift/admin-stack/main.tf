@@ -23,15 +23,16 @@ module "root_admin_stack" {
   # https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git
   enabled = local.create_root_admin_stack
 
-  stack_name       = try(var.stack_name, local.root_admin_stack_name)
-  administrative   = true
-  repository       = var.repository
-  space_id         = var.space_id
-  atmos_stack_name = try(local.root_admin_stack_config.stack, null)
-  component_name   = try(local.root_admin_stack_config.component, null)
-  component_root   = try(join("/", [var.component_root, local.root_admin_stack_config.metadata.component]), null)
-  manage_state     = false
-  worker_pool_id   = var.worker_pool_id
+  stack_name          = try(var.stack_name, local.root_admin_stack_name)
+  administrative      = true
+  repository          = var.repository
+  space_id            = var.space_id
+  atmos_stack_name    = try(local.root_admin_stack_config.stack, null)
+  component_name      = try(local.root_admin_stack_config.component, null)
+  component_root      = try(join("/", [var.component_root, local.root_admin_stack_config.metadata.component]), null)
+  manage_state        = false
+  worker_pool_id      = var.worker_pool_id
+  terraform_workspace = try(local.root_admin_stack_config.workspace, null)
 
   labels = try(local.root_admin_stack_config.labels, [])
 
@@ -61,13 +62,15 @@ module "child_stack" {
     if try(v.settings.spacelift.workspace_enabled, false) == true
   }
 
-  stack_name       = each.key
-  administrative   = try(each.value.settings.spacelift.administrative, false)
-  repository       = var.repository
-  space_id         = var.space_id
-  atmos_stack_name = try(each.value.stack, null)
-  component_name   = try(each.value.component, null)
-  component_root   = try(join("/", [var.component_root, each.value.metadata.component]), null)
+  stack_name     = each.key
+  administrative = try(each.value.settings.spacelift.administrative, false)
+  repository     = var.repository
+  space_id       = var.space_id
+
+  atmos_stack_name    = try(each.value.stack, null)
+  component_name      = try(each.value.component, null)
+  component_root      = try(join("/", [var.component_root, each.value.metadata.component]), null)
+  terraform_workspace = try(each.value.workspace, null)
 
   autodeploy            = try(each.value.settings.spacelift.autodeploy, false)
   autoretry             = try(each.value.settings.spacelift.autoretry, false)

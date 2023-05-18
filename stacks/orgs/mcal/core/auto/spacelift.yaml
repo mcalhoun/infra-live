@@ -38,6 +38,7 @@ components:
         component: spacelift/admin-stack
         inherits:
           - spacelift/admin-stack/defaults
+      spacelift:
       vars:
         stack_name: infrastructure-core-admin
         context_filters:

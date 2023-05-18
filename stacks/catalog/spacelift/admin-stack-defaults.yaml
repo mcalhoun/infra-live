@@ -19,8 +19,6 @@ components:
           labels:
             - admin
             - folder:admin
-          depends_on:
-            - spacelift/stack/root-admin
       vars:
         administrative: true
         branch: main
