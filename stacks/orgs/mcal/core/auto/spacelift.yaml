@@ -42,7 +42,8 @@ components:
       vars:
         stack_name: infrastructure-core-admin
         context_filters:
-          namespaces: [core]
+          tenants:
+            - core
           administrative: false
 
     spacelift/stack/plat-admin:
@@ -53,7 +54,8 @@ components:
       vars:
         stack_name: infrastructure-plat-admin
         context_filters:
-          namespaces: [plat]
+          tenants:
+            - plat
           administrative: false
 
     myfoo:
