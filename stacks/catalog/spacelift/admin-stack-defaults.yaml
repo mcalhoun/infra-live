@@ -19,6 +19,8 @@ components:
           labels:
             - admin
             - folder:admin
+          depends_on:
+            - infrastructure-root-admin
       vars:
         administrative: true
         branch: main

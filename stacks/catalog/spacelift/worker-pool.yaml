@@ -8,8 +8,6 @@ components:
           autodeploy: true
           labels:
             - spacelift-worker-pool
-            - folder:non-admin
-            - folder:non-admin-cplive-plat
       vars:
         enabled: true
         space_id: root
