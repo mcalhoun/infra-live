@@ -27,10 +27,10 @@ module "root_admin_stack" {
   administrative   = true
   repository       = var.repository
   space_id         = var.space_id
-  atmos_stack_name = try(local.root_admin_stack_name, null)
-  component_name   = try(local.root_admin_stack_config.metadata.component, null)
+  atmos_stack_name = try(local.root_admin_stack_config.stack, null)
+  component_name   = try(local.root_admin_stack_config.component, null)
   component_root   = try(join("/", [var.component_root, local.root_admin_stack_config.metadata.component]), null)
-  manage_state     = true
+  manage_state     = false
   worker_pool_id   = var.worker_pool_id
 
   labels = try(local.root_admin_stack_config.labels, [])
@@ -40,7 +40,7 @@ module "root_admin_stack" {
   protect_from_deletion = var.protect_from_deletion
   runner_image          = var.runner_image
 
-  before_init  = try(local.root_admin_stack_config.before_init, [])
+  before_init  = try(local.root_admin_stack_config.settings.spacelift.before_init, [])
   before_plan  = try(local.root_admin_stack_config.settings.spacelift.before_plan, [])
   before_apply = try(local.root_admin_stack_config.settings.spacelift.before_apply, [])
 }
@@ -84,6 +84,9 @@ module "child_stack" {
   worker_pool_id = var.worker_pool_id
 }
 
+output "root_config" {
+  value = local.root_admin_stack_config
+}
 # output "foo" {
 #   value = module.child_stacks_config.spacelift_stacks
 # }
