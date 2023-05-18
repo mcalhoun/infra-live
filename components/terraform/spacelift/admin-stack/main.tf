@@ -38,6 +38,7 @@ module "root_admin_stack" {
   autodeploy            = var.autodeploy
   autoretry             = var.autoretry
   protect_from_deletion = var.protect_from_deletion
+  runner_image          = var.runner_image
 
   before_init  = try(local.root_admin_stack_config.before_init, [])
   before_plan  = try(local.root_admin_stack_config.settings.spacelift.before_plan, [])
@@ -72,6 +73,7 @@ module "child_stack" {
   autoretry             = try(each.value.settings.spacelift.autoretry, false)
   manage_state          = try(each.value.settings.spacelift.manage_state, false)
   protect_from_deletion = try(each.value.settings.spacelift.protect_from_deletion, false)
+  runner_image          = try(each.value.settings.spacelift.runner_images, var.runner_image)
 
   labels = try(each.value.labels, [])
 
