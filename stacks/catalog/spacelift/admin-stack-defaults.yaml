@@ -20,7 +20,7 @@ components:
             - admin
             - folder:admin
           depends_on:
-            - infrastructure-root-admin
+            - spacelift/stack/root-admin
       vars:
         administrative: true
         branch: main
