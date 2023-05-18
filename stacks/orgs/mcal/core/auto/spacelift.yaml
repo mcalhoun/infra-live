@@ -39,6 +39,7 @@ components:
         inherits:
           - spacelift/admin-stack/defaults
       vars:
+        stack_name: infrastructure-core-admin
         context_filters:
           namespace: core
           administrative: false
@@ -49,6 +50,7 @@ components:
         inherits:
           - spacelift/admin-stack/defaults
       vars:
+        stack_name: infrastructure-plat-admin
         context_filters:
           namespace: plat
           administrative: false

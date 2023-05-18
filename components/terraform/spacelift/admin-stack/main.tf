@@ -84,12 +84,9 @@ module "child_stack" {
   worker_pool_id = var.worker_pool_id
 }
 
-output "root_config" {
-  value = local.root_admin_stack_config
+output "foo" {
+  value = module.child_stacks_config.spacelift_stacks
 }
-# output "foo" {
-#   value = module.child_stacks_config.spacelift_stacks
-# }
 
 # output "bar" {
 #   value = module.root_admin_stack_config.spacelift_stacks
