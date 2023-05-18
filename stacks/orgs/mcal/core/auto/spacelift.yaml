@@ -43,6 +43,15 @@ components:
           namespace: core
           administrative: false
 
+    spacelift/stack/plat-admin:
+      metadata:
+        component: spacelift/admin-stack
+        inherits:
+          - spacelift/admin-stack/defaults
+      vars:
+        context_filters:
+          namespace: plat
+          administrative: false
 
     myfoo:
       metadata:
