@@ -69,7 +69,7 @@ module "child_stack" {
 
   atmos_stack_name    = try(each.value.stack, null)
   component_name      = try(each.value.component, null)
-  component_root      = try(join("/", [var.component_root, each.value.component]))
+  component_root      = try(join("/", [var.component_root, try(each.value.metadata.component, each.value.component)]))
   terraform_workspace = try(each.value.workspace, null)
 
   autodeploy            = try(each.value.settings.spacelift.autodeploy, false)
