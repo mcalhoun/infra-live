@@ -7,6 +7,9 @@ import:
 components:
   terraform:
     spacelift/spaces:
+      settings:
+        spacelift:
+          administrative: true
       vars:
         spaces:
           core:
