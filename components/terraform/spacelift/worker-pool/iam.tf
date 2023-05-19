@@ -66,6 +66,7 @@ resource "aws_iam_role" "default" {
   assume_role_policy = join("", data.aws_iam_policy_document.assume_role_policy.*.json)
   managed_policy_arns = [
     join("", aws_iam_policy.default.*.arn),
+    "arn:${join("", data.aws_partition.current.*.partition)}:iam::aws:policy/AdministratorAccess", # This is just in my test environment
     "arn:${join("", data.aws_partition.current.*.partition)}:iam::aws:policy/AutoScalingReadOnlyAccess",
     "arn:${join("", data.aws_partition.current.*.partition)}:iam::aws:policy/CloudWatchAgentServerPolicy",
     "arn:${join("", data.aws_partition.current.*.partition)}:iam::aws:policy/AmazonSSMManagedInstanceCore",
