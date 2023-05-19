@@ -9,7 +9,7 @@ locals {
 # organization. This stack is denoted by setting the root_administrative property to true in the atmos config. Only one
 # such stack is allowed in the Spacelift organization.
 module "root_admin_stack_config" {
-  source  = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stacks-from-atmos-config?ref=chore/cleanup-stack-module"
+  source  = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stacks-from-atmos-config?ref=chore/refactor-module"
   enabled = local.create_root_admin_stack
 
   context_filters = {
@@ -18,7 +18,7 @@ module "root_admin_stack_config" {
 }
 
 module "root_admin_stack" {
-  source = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stack?ref=chore/cleanup-stack-module"
+  source = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stack?ref=chore/refactor-module"
   #version = "0.55.0"
   # https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git
   enabled = local.create_root_admin_stack
@@ -49,12 +49,12 @@ module "root_admin_stack" {
 # We now get all of the stack configurations from the atmos config that matched the context_filters and create a stack
 # for each one.
 module "child_stacks_config" {
-  source          = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stacks-from-atmos-config?ref=chore/cleanup-stack-module"
+  source          = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stacks-from-atmos-config?ref=chore/refactor-module"
   context_filters = var.context_filters
 }
 
 module "child_stack" {
-  source = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stack?ref=chore/cleanup-stack-module"
+  source = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stack?ref=chore/refactor-module"
   #version = "0.55.0"
 
   for_each = {
