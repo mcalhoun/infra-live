@@ -6,6 +6,21 @@ import:
 
 components:
   terraform:
+    spacelift/spaces:
+      vars:
+        spaces:
+          core:
+            parent_space_id: root
+            description: The space for core
+            inherit_entities: true
+            labels:
+              - core
+          plat:
+            parent_space_id: root
+            description: The space for platform
+            labels:
+              - plat
+
     spacelift/worker-pool:
       vars:
         ecr_repo_arn: arn:aws:ecr:us-east-2:552533042161:repository/mcalhoun/infra-live
