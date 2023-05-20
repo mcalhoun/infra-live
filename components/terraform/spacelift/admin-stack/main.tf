@@ -3,7 +3,7 @@ locals {
   create_root_admin_stack = local.enabled && var.root_admin_stack
   root_admin_stack_name   = local.create_root_admin_stack ? keys(module.root_admin_stack_config.spacelift_stacks)[0] : null
   root_admin_stack_config = local.create_root_admin_stack ? module.root_admin_stack_config.spacelift_stacks[local.root_admin_stack_name] : null
-  managed_by              = local.create_root_admin_stack ? local.root_admin_stack_name : null
+  managed_by              = local.create_root_admin_stack ? local.root_admin_stack_name : "matt"
 
   # This loops through all of the administrative stacks in the atmos config and extracts the space_name from the
   # spacelift.settings metadata. It then creates a set of all of the unique space_names so we can use that to look up
