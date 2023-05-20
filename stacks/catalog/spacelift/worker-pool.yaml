@@ -5,6 +5,7 @@ components:
         component: spacelift/worker-pool
       settings:
         spacelift:
+          space_name: root
           autodeploy: true
           labels:
             - spacelift-worker-pool

@@ -1,0 +1,26 @@
+import:
+  - mixins/region/global-region
+  - orgs/mcal/plat/_defaults
+  - catalog/spacelift/admin-stack-defaults
+
+vars:
+  tenant: infra
+  environment: gbl
+  stage: plat
+
+components:
+  terraform:
+    spacelift/admin-stack:
+      metadata:
+        component: spacelift/admin-stack
+        inherits:
+          - spacelift/admin-stack/defaults
+      settings:
+        spacelift:
+          space_name: plat
+      vars:
+        stack_name: infrastructure-plat-admin
+        context_filters:
+          tenants:
+            - plat
+          administrative: false

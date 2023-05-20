@@ -2,8 +2,8 @@ import:
   - orgs/mcal/_defaults
 
 vars:
-  tenant: core
+  tenant: plat
 
 settings:
   spacelift:
-    space_name: core
+    space_name: plat

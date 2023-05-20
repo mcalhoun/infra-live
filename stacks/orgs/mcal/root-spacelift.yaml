@@ -1,0 +1,49 @@
+import:
+  - mixins/region/global-region
+  - orgs/mcal/_defaults
+  - catalog/spacelift/admin-stack-defaults
+
+vars:
+  tenant: infra
+  environment: gbl
+  stage: root
+
+components:
+  terraform:
+    spacelift/spaces:
+      settings:
+        spacelift:
+          administrative: true
+          space_name: root
+          #stack_name: infrastructure-root-spaces
+      vars:
+        spaces:
+          core:
+            parent_space_id: root
+            description: The space for core
+            inherit_entities: true
+            labels:
+              - core
+          plat:
+            parent_space_id: root
+            description: The space for platform
+            inherit_entities: true
+            labels:
+              - plat
+
+    spacelift/admin-stack:
+      metadata:
+        component: spacelift/admin-stack
+        inherits:
+          - spacelift/admin-stack/defaults
+      settings:
+        spacelift:
+          root_administrative: true
+          labels:
+            - root-admin
+            - admin
+      vars:
+        root_admin_stack: true
+        context_filters:
+          administrative: true # This stack is managing all the other admin stacks
+          root_administrative: false # We don't want this stack to also find itself and add itself a second time

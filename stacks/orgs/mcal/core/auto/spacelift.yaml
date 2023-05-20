@@ -6,24 +6,6 @@ import:
 
 components:
   terraform:
-    spacelift/spaces:
-      settings:
-        spacelift:
-          administrative: true
-      vars:
-        spaces:
-          core:
-            parent_space_id: root
-            description: The space for core
-            inherit_entities: true
-            labels:
-              - core
-          plat:
-            parent_space_id: root
-            description: The space for platform
-            labels:
-              - plat
-
     spacelift/worker-pool:
       vars:
         ecr_repo_arn: arn:aws:ecr:us-east-2:552533042161:repository/mcalhoun/infra-live
@@ -32,52 +14,3 @@ components:
         vpc_id: vpc-07d82ff52c10f25e0
         vpc_private_subnet_ids:
           - subnet-0a5369040436a81ce
-
-    spacelift/stack/root-admin:
-      metadata:
-        component: spacelift/admin-stack
-        inherits:
-          - spacelift/admin-stack/defaults
-      settings:
-        spacelift:
-          root_administrative: true
-          labels:
-            - root-admin
-            - admin
-      vars:
-        root_admin_stack: true
-        stack_name: infrastructure-root-admin
-        context_filters:
-          administrative: true # This stack is managing all the other admin stacks
-          root_administrative: false # We don't want this stack to also find itself and add itself a second time
-
-    spacelift/stack/core-admin:
-      metadata:
-        component: spacelift/admin-stack
-        inherits:
-          - spacelift/admin-stack/defaults
-      spacelift:
-      vars:
-        stack_name: infrastructure-core-admin
-        context_filters:
-          tenants:
-            - core
-          administrative: false
-
-    spacelift/stack/plat-admin:
-      metadata:
-        component: spacelift/admin-stack
-        inherits:
-          - spacelift/admin-stack/defaults
-      vars:
-        stack_name: infrastructure-plat-admin
-        context_filters:
-          tenants:
-            - plat
-          administrative: false
-
-    myfoo:
-      metadata:
-        component: foo
-      vars:
-        some_var: foo

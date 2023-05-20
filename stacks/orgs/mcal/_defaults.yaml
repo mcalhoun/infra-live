@@ -4,7 +4,7 @@ vars:
 terraform:
   settings:
     spacelift:
-      # enable spacelift by default
+      space_name: root
       workspace_enabled: true
       before_apply:
         - spacelift-configure-paths

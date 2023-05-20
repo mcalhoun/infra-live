@@ -1,3 +1,9 @@
+variable "region" {
+  type        = string
+  description = "The AWS region to use"
+  default     = "us-east-1"
+}
+
 variable "administrative" {
   type        = bool
   description = "Whether this stack can manage other stacks"
@@ -33,11 +39,6 @@ variable "after_plan" {
   description = "List of after-plan scripts"
   default     = []
 }
-
-# variable "atmos_stack_name" {
-#   type        = string
-#   description = "The name of the atmos stack"
-# }
 
 variable "autodeploy" {
   type        = bool
@@ -291,6 +292,7 @@ variable "stack_destructor_enabled" {
 variable "stack_name" {
   type        = string
   description = "The name of the Spacelift stack"
+  default     = null
 }
 
 variable "terraform_smart_sanitization" {

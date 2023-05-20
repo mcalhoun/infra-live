@@ -1,6 +1,6 @@
 import:
-  - mixins/region/us-east-1
-  - orgs/mcal/core/auto/_defaults
+  - mixins/region/us-east-2
+  - orgs/mcal/plat/dev/_defaults
 
 components:
   terraform:
@@ -9,4 +9,3 @@ components:
         component: foo
       vars:
         some_var: foo
-
