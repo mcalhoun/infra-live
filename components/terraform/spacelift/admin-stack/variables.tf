@@ -331,9 +331,9 @@ variable "webhook_secret" {
   default     = null
 }
 
-variable "worker_pool_id" {
+variable "worker_pool_name" {
   type        = string
-  description = "The immutable ID (slug) of the worker pool"
+  description = "The atmos stack name of the worker pool. Example: `acme-core-ue2-auto-spacelift-default-worker-pool`"
   default     = null
 }
 

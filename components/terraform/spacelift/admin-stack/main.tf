@@ -19,7 +19,11 @@ locals {
     }, {
     root = "root"
   })
+
+  worker_pools = { for k, v in data.spacelift_worker_pools.this.worker_pools : v.name => v.worker_pool_id }
 }
+
+data "spacelift_worker_pools" "this" {}
 
 # The root admin stack is a special stack that is used to manage all of the other admin stacks in the the Spacelift
 # organization. This stack is denoted by setting the root_administrative property to true in the atmos config. Only one
@@ -47,7 +51,7 @@ module "root_admin_stack" {
   component_name      = try(local.root_admin_stack_config.component, null)
   component_root      = try(join("/", [var.component_root, local.root_admin_stack_config.metadata.component]), null)
   manage_state        = false
-  worker_pool_id      = var.worker_pool_id
+  worker_pool_id      = local.worker_pools[var.worker_pool_name]
   terraform_workspace = try(local.root_admin_stack_config.workspace, null)
 
   labels = try(local.root_admin_stack_config.labels, [])
@@ -100,14 +104,14 @@ module "child_stack" {
   before_plan  = try(each.value.settings.spacelift.before_plan, [])
   before_apply = try(each.value.settings.spacelift.before_apply, [])
 
-  worker_pool_id = var.worker_pool_id
+  worker_pool_id = local.worker_pools[var.worker_pool_name]
 }
 
 #component      = "spacelift/admin-stack"
 #stack          = "infra-gbl-root"
 
 # output "foo" {
-#   value = local.root_admin_stack_name
+#   value = local.worker_pools
 # }
 
 # output "foo" {
