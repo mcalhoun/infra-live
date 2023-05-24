@@ -70,7 +70,7 @@ resource "aws_iam_role" "default" {
     "arn:${join("", data.aws_partition.current.*.partition)}:iam::aws:policy/AutoScalingReadOnlyAccess",
     "arn:${join("", data.aws_partition.current.*.partition)}:iam::aws:policy/CloudWatchAgentServerPolicy",
     "arn:${join("", data.aws_partition.current.*.partition)}:iam::aws:policy/AmazonSSMManagedInstanceCore",
-    "arn:${join("", data.aws_partition.current.*.partition)}:iam::aws:policy/AWSXRayDaemonWriteAccess"
+    "arn:${join("", data.aws_partition.current.*.partition)}:iam::aws:policy/AWSXRayDaemonWriteAccess",
   ]
 
   tags = module.iam_label.tags

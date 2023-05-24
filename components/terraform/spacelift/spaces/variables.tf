@@ -1,9 +1,3 @@
-variable "region" {
-  type        = string
-  description = "The AWS region to use"
-  default     = "us-east-1"
-}
-
 variable "spaces" {
   type = map(object({
     parent_space_id  = string,

@@ -4,6 +4,7 @@ import:
 vars:
   tenant: plat
 
-settings:
-  spacelift:
-    space_name: plat
+terraform:
+  settings:
+    spacelift:
+      space_name: plat

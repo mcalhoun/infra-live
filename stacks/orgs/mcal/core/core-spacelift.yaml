@@ -7,6 +7,9 @@ vars:
   tenant: infra
   environment: gbl
   stage: core
+settings:
+  spacelift:
+    space_name: core
 
 components:
   terraform:
@@ -15,9 +18,6 @@ components:
         component: spacelift/admin-stack
         inherits:
           - spacelift/admin-stack/defaults
-      settings:
-        spacelift:
-          space_name: core
       vars:
         stack_name: infrastructure-core-admin
         context_filters:

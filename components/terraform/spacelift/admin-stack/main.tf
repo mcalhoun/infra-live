@@ -7,16 +7,18 @@ locals {
 
   # This loops through all of the administrative stacks in the atmos config and extracts the space_name from the
   # spacelift.settings metadata. It then creates a set of all of the unique space_names so we can use that to look up
-  # their IDs from SSM parameters.
-  spaces = toset([for k, v in {
+  # their IDs from remote state.
+  unique_spaces = toset([for k, v in {
     for k, v in module.child_stacks_config.spacelift_stacks : k => try(v.settings.spacelift.space_name, "root")
     if try(v.settings.spacelift.workspace_enabled, false) == true
   } : v if v != "root"])
-}
 
-data "aws_ssm_parameter" "spaces" {
-  for_each = local.spaces
-  name     = "/spacelift/spaces/${each.key}/id"
+  # Create a map of all the unique spaces {space_name = space_id}
+  spaces = merge({
+    for k in local.unique_spaces : k => module.spaces.outputs.spaces[k].id
+    }, {
+    root = "root"
+  })
 }
 
 # The root admin stack is a special stack that is used to manage all of the other admin stacks in the the Spacelift
@@ -79,7 +81,7 @@ module "child_stack" {
   stack_name     = try(each.value.settings.spacelift.stack_name, each.key)
   administrative = try(each.value.settings.spacelift.administrative, false)
   repository     = var.repository
-  space_id       = try(nonsensitive(data.aws_ssm_parameter.spaces[each.value.settings.spacelift.space_name].value), "root")
+  space_id       = local.spaces[each.value.settings.spacelift.space_name]
 
   atmos_stack_name    = try(each.value.stack, null)
   component_name      = try(each.value.component, null)
@@ -108,9 +110,9 @@ module "child_stack" {
 #   value = local.root_admin_stack_name
 # }
 
-output "foo" {
-  value = module.child_stacks_config.spacelift_stacks
-}
+# output "foo" {
+#   value = module.child_stacks_config.spacelift_stacks
+# }
 
 # output "spaces" {
 #   value = local.spaces

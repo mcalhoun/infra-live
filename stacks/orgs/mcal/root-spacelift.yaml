@@ -46,4 +46,4 @@ components:
         root_admin_stack: true
         context_filters:
           administrative: true # This stack is managing all the other admin stacks
-          root_administrative: false # We don't want this stack to also find itself and add itself a second time
+          root_administrative: false # We don't want this stack to also find itself in the config and add itself a second time

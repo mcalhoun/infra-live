@@ -4,6 +4,7 @@ import:
 vars:
   tenant: core
 
-settings:
-  spacelift:
-    space_name: core
+terraform:
+  settings:
+    spacelift:
+      space_name: core

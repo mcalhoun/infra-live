@@ -1,16 +1,4 @@
 import:
   - mixins/region/global-region
   - orgs/mcal/core/auto/_defaults
-  - catalog/spacelift/worker-pool
   - catalog/spacelift/admin-stack-defaults
-
-components:
-  terraform:
-    spacelift/worker-pool:
-      vars:
-        ecr_repo_arn: arn:aws:ecr:us-east-2:552533042161:repository/mcalhoun/infra-live
-        ecr_repo_url: 552533042161.dkr.ecr.us-east-2.amazonaws.com/mcalhoun/infra-live
-        identity_account_id: 552533042161
-        vpc_id: vpc-07d82ff52c10f25e0
-        vpc_private_subnet_ids:
-          - subnet-0a5369040436a81ce
