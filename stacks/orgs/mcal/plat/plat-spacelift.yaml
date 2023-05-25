@@ -24,3 +24,7 @@ components:
           tenants:
             - plat
           administrative: false
+          child_policy_attachments:
+            - GIT_PUSH Proposed Run
+            - GIT_PUSH Tracked Run
+            - PLAN Default
