@@ -42,7 +42,7 @@ module "child_stack" {
   protect_from_deletion = try(each.value.settings.spacelift.protect_from_deletion, false)
   runner_image          = try(each.value.settings.spacelift.runner_images, var.runner_image)
 
-  labels = concat(try(each.value.labels, []), ["managed-by:${local.managed_by}"])
+  labels = concat(try(each.value.labels, []), ["managed-by:${local.managed_by}"], local.create_root_admin_stack ? ["depends-on:${local.root_admin_stack_name}"] : [])
 
   before_init  = try(each.value.settings.spacelift.before_init, [])
   before_plan  = try(each.value.settings.spacelift.before_plan, [])
