@@ -18,6 +18,34 @@ components:
           #stack_name: infrastructure-root-spaces
       vars:
         spaces:
+          # root is a special space that is the parent of all other spaces and cannot be deleted or renamed. Only the
+          # policies block is actually consumed by the component to create policies for the root space.
+          root:
+            parent_space_id: root
+            description: The root space
+            inherit_entities: true
+            policies:
+              GIT_PUSH Global Administrator:
+                type: GIT_PUSH
+                body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/git_push.administrative.rego
+              TRIGGER Global Administrator:
+                type: TRIGGER
+                body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/trigger.administrative.rego
+              GIT_PUSH Proposed Run:
+                type: GIT_PUSH
+                body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/git_push.proposed-run.rego
+              GIT_PUSH Tracked Run:
+                type: GIT_PUSH
+                body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/git_push.tracked-run.rego
+              PLAN Default:
+                type: PLAN
+                body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/plan.default.rego
+              TRIGGER Dependencies:
+                type: TRIGGER
+                body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/trigger.dependencies.rego
+              PLAN Warn On Resource Changes Except Image ID:
+                type: PLAN
+                body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/plan.warn-on-resource-changes-except-image-id.rego
           core:
             parent_space_id: root
             description: The space for core
@@ -42,8 +70,15 @@ components:
           labels:
             - root-admin
             - admin
+          policies: {}
       vars:
         root_admin_stack: true
         context_filters:
           administrative: true # This stack is managing all the other admin stacks
           root_administrative: false # We don't want this stack to also find itself in the config and add itself a second time
+        root_stack_policy_attachments:
+          - GIT_PUSH Global Administrator
+          - TRIGGER Global Administrator
+        child_policy_attachments:
+          - GIT_PUSH Global Administrator
+          - TRIGGER Global Administrator

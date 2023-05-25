@@ -355,3 +355,15 @@ variable "root_admin_stack" {
   type        = bool
   default     = false
 }
+
+variable "root_stack_policy_attachments" {
+  description = "List of policy attachments to attach to the root admin stack"
+  type        = set(string)
+  default     = []
+}
+
+variable "child_policy_attachments" {
+  description = "List of policy attachments to attach to the child stacks created by this module"
+  type        = set(string)
+  default     = []
+}

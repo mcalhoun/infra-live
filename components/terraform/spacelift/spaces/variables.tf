@@ -4,6 +4,13 @@ variable "spaces" {
     description      = optional(string),
     inherit_entities = optional(bool, false),
     labels           = optional(set(string), []),
+    policies = optional(map(object({
+      body             = optional(string),
+      body_url         = optional(string),
+      body_url_version = optional(string, "master"),
+      type             = optional(string),
+      labels           = optional(set(string), []),
+    })), {}),
   }))
 }
 
