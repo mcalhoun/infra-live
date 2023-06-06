@@ -31,21 +31,21 @@ components:
               TRIGGER Global Administrator:
                 type: TRIGGER
                 body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/trigger.administrative.rego
-              GIT_PUSH Proposed Run:
-                type: GIT_PUSH
-                body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/git_push.proposed-run.rego
-              GIT_PUSH Tracked Run:
-                type: GIT_PUSH
-                body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/git_push.tracked-run.rego
-              PLAN Default:
-                type: PLAN
-                body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/plan.default.rego
-              TRIGGER Dependencies:
-                type: TRIGGER
-                body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/trigger.dependencies.rego
-              PLAN Warn On Resource Changes Except Image ID:
-                type: PLAN
-                body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/plan.warn-on-resource-changes-except-image-id.rego
+              #GIT_PUSH Proposed Run:
+              #  type: GIT_PUSH
+              #  body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/git_push.proposed-run.rego
+              #GIT_PUSH Tracked Run:
+              #  type: GIT_PUSH
+              #  body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/git_push.tracked-run.rego
+              #PLAN Default:
+              #  type: PLAN
+              #  body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/plan.default.rego
+              #TRIGGER Dependencies:
+              #  type: TRIGGER
+              #  body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/trigger.dependencies.rego
+              #PLAN Warn On Resource Changes Except Image ID:
+              #  type: PLAN
+              #  body_url: https://raw.githubusercontent.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/%s/catalog/policies/plan.warn-on-resource-changes-except-image-id.rego
           core:
             parent_space_id: root
             description: The space for core
@@ -73,6 +73,8 @@ components:
           policies: {}
       vars:
         root_admin_stack: true
+        labels:
+         - admin-stack-name:root
         context_filters:
           administrative: true # This stack is managing all the other admin stacks
           root_administrative: false # We don't want this stack to also find itself in the config and add itself a second time

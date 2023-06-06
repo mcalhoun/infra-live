@@ -19,8 +19,14 @@ components:
         spacelift:
           space_name: plat
       vars:
-        stack_name: infrastructure-plat-admin
+        labels:
+         - admin-stack-name:plat
         context_filters:
           tenants:
             - plat
           administrative: false
+        child_policy_attachments:
+          - GIT_PUSH Proposed Run
+          - GIT_PUSH Tracked Run
+          - PLAN Default
+          - Foo

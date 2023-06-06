@@ -1,7 +1,7 @@
-variable "region" {
+variable "admin_stack_label" {
+  description = "Label to use to identify the admin stack when creating the child stacks"
   type        = string
-  description = "The AWS region to use"
-  default     = "us-east-1"
+  default     = "admin-stack-name"
 }
 
 variable "administrative" {
@@ -10,36 +10,11 @@ variable "administrative" {
   default     = false
 }
 
-variable "after_apply" {
-  type        = list(string)
-  description = "List of after-apply scripts"
-  default     = []
+variable "allow_public_workers" {
+  type        = bool
+  description = "Whether to allow public workers to be used for this stack"
+  default     = false
 }
-
-variable "after_destroy" {
-  type        = list(string)
-  description = "List of after-destroy scripts"
-  default     = []
-}
-
-variable "after_init" {
-  type        = list(string)
-  description = "List of after-init scripts"
-  default     = []
-}
-
-variable "after_perform" {
-  type        = list(string)
-  description = "List of after-perform scripts"
-  default     = []
-}
-
-variable "after_plan" {
-  type        = list(string)
-  description = "List of after-plan scripts"
-  default     = []
-}
-
 variable "autodeploy" {
   type        = bool
   description = "Controls the Spacelift 'autodeploy' option for a stack"
@@ -82,36 +57,6 @@ variable "azure_devops" {
   default     = null
 }
 
-variable "before_apply" {
-  type        = list(string)
-  description = "List of before-apply scripts"
-  default     = []
-}
-
-variable "before_destroy" {
-  type        = list(string)
-  description = "List of before-destroy scripts"
-  default     = []
-}
-
-variable "before_init" {
-  type        = list(string)
-  description = "List of before-init scripts"
-  default     = []
-}
-
-variable "before_perform" {
-  type        = list(string)
-  description = "List of before-perform scripts"
-  default     = []
-}
-
-variable "before_plan" {
-  type        = list(string)
-  description = "List of before-plan scripts"
-  default     = []
-}
-
 variable "bitbucket_cloud" {
   type        = map(any)
   description = "Bitbucket Cloud VCS settings"
@@ -128,6 +73,12 @@ variable "branch" {
   type        = string
   description = "Specify which branch to use within your infrastructure repo"
   default     = "main"
+}
+
+variable "child_policy_attachments" {
+  description = "List of policy attachments to attach to the child stacks created by this module"
+  type        = set(string)
+  default     = []
 }
 
 variable "cloudformation" {
@@ -148,11 +99,6 @@ variable "component_env" {
   description = "Map of component ENV variables"
 }
 
-# variable "component_name" {
-#   type        = string
-#   description = "The name of the concrete component (typically a directory name)"
-# }
-
 variable "component_root" {
   type        = string
   description = "The path, relative to the root of the repository, where the component can be found"
@@ -168,6 +114,19 @@ variable "context_attachments" {
   type        = set(string)
   description = "A list of context IDs to attach to this stack"
   default     = []
+}
+
+variable "context_filters" {
+  description = "Context filters to select atmos stacks matching specific criteria to create as children."
+  type = object({
+    namespaces          = optional(list(string), [])
+    environments        = optional(list(string), [])
+    tenants             = optional(list(string), [])
+    stages              = optional(list(string), [])
+    tags                = optional(map(string), {})
+    administrative      = optional(bool)
+    root_administrative = optional(bool)
+  })
 }
 
 variable "description" {
@@ -194,6 +153,12 @@ variable "drift_detection_schedule" {
   default     = ["0 4 * * *"]
 }
 
+variable "drift_detection_timezone" {
+  type        = string
+  description = "Timezone in which the schedule is expressed. Defaults to UTC."
+  default     = null
+}
+
 variable "github_enterprise" {
   type        = map(any)
   description = "GitHub Enterprise (self-hosted) VCS settings"
@@ -204,6 +169,12 @@ variable "gitlab" {
   type        = map(any)
   description = "GitLab VCS settings"
   default     = null
+}
+
+variable "initial_bootstrap" {
+  type        = bool
+  description = "Flag to enable/disable initial bootstrap of the stack"
+  default     = false
 }
 
 variable "labels" {
@@ -221,7 +192,7 @@ variable "local_preview_enabled" {
 variable "manage_state" {
   type        = bool
   description = "Flag to enable/disable manage_state setting in stack"
-  default     = true
+  default     = false
 }
 
 variable "parent_space_id" {
@@ -248,9 +219,27 @@ variable "pulumi" {
   default     = null
 }
 
+variable "region" {
+  type        = string
+  description = "The AWS region to use"
+  default     = "us-east-1"
+}
+
 variable "repository" {
   type        = string
   description = "The name of your infrastructure repo"
+}
+
+variable "root_admin_stack" {
+  description = "Flag to indicate if this stack is the root admin stack. In this case, the stack will be created in the root space and will create all the other admin stacks as children."
+  type        = bool
+  default     = false
+}
+
+variable "root_stack_policy_attachments" {
+  description = "List of policy attachments to attach to the root admin stack"
+  type        = set(string)
+  default     = []
 }
 
 variable "runner_image" {
@@ -275,6 +264,24 @@ variable "spacelift_run_enabled" {
   type        = bool
   description = "Enable/disable creation of the `spacelift_run` resource"
   default     = false
+}
+
+variable "spacelift_spaces_environment_name" {
+  type        = string
+  description = "The environment name of the spacelift spaces component"
+  default     = null
+}
+
+variable "spacelift_spaces_stage_name" {
+  type        = string
+  description = "The stage name of the spacelift spaces component"
+  default     = null
+}
+
+variable "spacelift_spaces_tenant_name" {
+  type        = string
+  description = "The tenant name of the spacelift spaces component"
+  default     = null
 }
 
 variable "spacelift_stack_dependency_enabled" {
@@ -307,6 +314,12 @@ variable "terraform_version" {
   default     = null
 }
 
+variable "terraform_version_map" {
+  type        = map(string)
+  description = "A map to determine which Terraform patch version to use for each minor version"
+  default     = {}
+}
+
 variable "terraform_workspace" {
   type        = string
   description = "Specify the Terraform workspace to use for the stack"
@@ -335,35 +348,4 @@ variable "worker_pool_name" {
   type        = string
   description = "The atmos stack name of the worker pool. Example: `acme-core-ue2-auto-spacelift-default-worker-pool`"
   default     = null
-}
-
-variable "context_filters" {
-  description = "Context filters to select atmos stacks matching specific criteria to create as children."
-  type = object({
-    namespaces          = optional(list(string), [])
-    environments        = optional(list(string), [])
-    tenants             = optional(list(string), [])
-    stages              = optional(list(string), [])
-    tags                = optional(map(string), {})
-    administrative      = optional(bool)
-    root_administrative = optional(bool)
-  })
-}
-
-variable "root_admin_stack" {
-  description = "Flag to indicate if this stack is the root admin stack. In this case, the stack will be created in the root space and will create all the other admin stacks as children."
-  type        = bool
-  default     = false
-}
-
-variable "root_stack_policy_attachments" {
-  description = "List of policy attachments to attach to the root admin stack"
-  type        = set(string)
-  default     = []
-}
-
-variable "child_policy_attachments" {
-  description = "List of policy attachments to attach to the child stacks created by this module"
-  type        = set(string)
-  default     = []
 }

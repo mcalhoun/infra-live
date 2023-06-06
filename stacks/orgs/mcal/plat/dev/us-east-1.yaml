@@ -5,6 +5,9 @@ import:
 components:
   terraform:
     myfoo:
+      settings:
+        spacelift:
+          admin-stack: 
       metadata:
         component: foo
       vars:

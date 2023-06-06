@@ -10,7 +10,7 @@ locals {
   } : {}
 
   # Create a map of all the policies {policy_name = policy}
-  policies = local.enabled ? { for item in values(module.policy)[*].policy : item.name => {
+  policies = local.enabled ? { for item in distinct(values(module.policy)[*].policy) : item.name => {
     id       = item.id
     type     = item.type
     labels   = toset(item.labels)
@@ -48,24 +48,6 @@ module "space" {
   inherit_entities_from_parent = each.value.inherit_entities
   labels                       = each.value.labels
 }
-
-locals {
-  pol = {
-    root = {
-      "policy1" = {
-        body = "hi"
-        type = "ACCESS"
-      }
-    },
-    core = {
-      "policy2" = {
-        body = "hi"
-        type = "ACCESS"
-      }
-    }
-  }
-}
-
 
 module "policy" {
   source = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-policy?ref=chore/refactor-module"

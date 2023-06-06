@@ -19,7 +19,8 @@ components:
         inherits:
           - spacelift/admin-stack/defaults
       vars:
-        stack_name: infrastructure-core-admin
+        labels:
+         - admin-stack-name:core
         context_filters:
           tenants:
             - core
