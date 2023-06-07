@@ -21,6 +21,7 @@ data "spacelift_worker_pools" "this" {
 
 # Ensure no stacks are configured to use public workers if they are not allowed
 resource "null_resource" "public_workers_precondition" {
+  count = local.enabled ? 1 : 0
   lifecycle {
     precondition {
       condition     = var.allow_public_workers == true || contains(local.missing_workers, "public") == false
@@ -31,6 +32,8 @@ resource "null_resource" "public_workers_precondition" {
 
 # Ensure all of the spaces referenced in the atmos config exist in Spacelift
 resource "null_resource" "workers_precondition" {
+  count = local.enabled ? 1 : 0
+
   depends_on = [null_resource.public_workers_precondition]
 
   lifecycle {

@@ -171,12 +171,6 @@ variable "gitlab" {
   default     = null
 }
 
-variable "initial_bootstrap" {
-  type        = bool
-  description = "Flag to enable/disable initial bootstrap of the stack"
-  default     = false
-}
-
 variable "labels" {
   type        = list(string)
   description = "A list of labels for the stack"

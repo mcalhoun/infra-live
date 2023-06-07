@@ -20,6 +20,8 @@ locals {
 
 # Ensure all of the spaces referenced in the atmos config exist in Spacelift
 resource "null_resource" "spaces_precondition" {
+  count = local.enabled ? 1 : 0
+
   lifecycle {
     precondition {
       condition     = length(local.missing_spaces) == 0

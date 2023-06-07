@@ -1,29 +1,43 @@
 locals {
   child_stacks = {
     for k, v in module.child_stacks_config.spacelift_stacks : k => v
-    if try(v.settings.spacelift.workspace_enabled, false) == true
+    if local.enabled == true &&
+    try(v.settings.spacelift.workspace_enabled, false) == true
   }
 
   child_stack_policies = {
     for k, v in module.all_admin_stacks_config.spacelift_stacks : k => v.vars.child_policy_attachments
-    if try(v.settings.spacelift.workspace_enabled, false) == true &&
+    if local.enabled == true &&
+    try(v.settings.spacelift.workspace_enabled, false) == true &&
     try(v.vars.child_policy_attachments, null) != null
   }
 
-  child_policies = local.create_root_admin_stack ? var.child_policy_attachments : local.child_stack_policies[local.managed_by]
-  #admin_stack_label = try([for item in var.labels : item if startswith(item, join(var.admin_stack_label, ":"))][0], null)
+  child_policies    = local.create_root_admin_stack ? var.child_policy_attachments : try(local.child_stack_policies[local.managed_by], null)
+  child_policy_ids  = try([for item in local.child_policies : local.policies[item]], [])
   admin_stack_label = try([for item in var.labels : item if startswith(item, format("${var.admin_stack_label}:"))][0], null)
-  managed_by        = local.enabled ? (local.create_root_admin_stack ? local.root_admin_stack_name : data.spacelift_stacks.this[0].stacks[0].name) : null
-
+  managed_by        = local.create_root_admin_stack ? local.root_admin_stack_name : try(data.spacelift_stacks.this[0].stacks[0].name, null)
 }
 
 data "spacelift_stacks" "this" {
-  count = local.enabled && !local.create_root_admin_stack && local.admin_stack_label != null ? 1 : 0
+  count = (
+    local.enabled &&
+    local.create_root_admin_stack == false &&
+    local.admin_stack_label != null
+  ) ? 1 : 0
   labels {
     any_of = [local.admin_stack_label]
   }
+}
 
-  depends_on = [module.root_admin_stack]
+# Ensure no stacks are configured to use public workers if they are not allowed
+resource "null_resource" "child_stack_parent_precondition" {
+  count = local.enabled ? 1 : 0
+  lifecycle {
+    precondition {
+      condition     = local.create_root_admin_stack ? true : length(data.spacelift_stacks.this[0].stacks) > 0
+      error_message = "Please apply this stack's parent before applying this stack."
+    }
+  }
 }
 
 # Get all of the stack configurations from the atmos config that matched the context_filters and create a stack# for
@@ -31,19 +45,20 @@ data "spacelift_stacks" "this" {
 module "child_stacks_config" {
   source          = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stacks-from-atmos-config?ref=chore/refactor-module"
   context_filters = var.context_filters
+
+  context = module.this.context
 }
 
 module "child_stack" {
   source = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stack?ref=chore/refactor-module"
   #version = "0.55.0"
 
-  enabled = local.enabled && !var.initial_bootstrap
-
   for_each = local.child_stacks
   depends_on = [
     null_resource.spaces_precondition,
     null_resource.workers_precondition,
-    spacelift_policy_attachment.root
+    spacelift_policy_attachment.root,
+    null_resource.child_stack_parent_precondition
   ]
 
   administrative                          = try(each.value.settings.spacelift.administrative, false)
@@ -84,7 +99,7 @@ module "child_stack" {
   )
   local_preview_enabled        = try(each.value.local_preview_enabled, var.local_preview_enabled)
   manage_state                 = try(each.value.manage_state, var.manage_state)
-  policy_ids                   = [for item in local.child_policies : local.policies[item]]
+  policy_ids                   = try(local.child_policy_ids, [])
   protect_from_deletion        = try(each.value.settings.spacelift.protect_from_deletion, false)
   repository                   = var.repository
   runner_image                 = try(each.value.settings.spacelift.runner_image, var.runner_image)
@@ -108,4 +123,22 @@ module "child_stack" {
   gitlab               = try(local.root_admin_stack_config.gitlab, null)
   pulumi               = try(local.root_admin_stack_config.pulumi, null)
   showcase             = try(local.root_admin_stack_config.showcase, null)
+
+  context = module.this.context
+}
+
+# TODO: Remove these after testing
+output "local-child-policy-ids" {
+  value = local.child_policy_ids
+}
+output "local-child-policies" {
+  value = local.child_policies
+}
+
+output "local-policies" {
+  value = local.policies
+}
+
+output "local-managed-by" {
+  value = local.managed_by
 }
