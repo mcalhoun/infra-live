@@ -27,7 +27,7 @@ rest of the infrastructure. This section walks through the initial bootstrapping
 1. We can now use the `spacectl` CLI to export an environment variable, allowing Terraform to manage spacelift resources.
 
 ```bash
-  $ export SPACELIFT_API_TOKEN=$(spacectl profile export-token)
+  export SPACELIFT_API_TOKEN=$(spacectl profile export-token)
 ```
 
 4. Finally, login to [AWS using Leapp](https://docs.cloudposse.com/howto/geodesic/authenticate-with-leapp) so that you have access to the Terraform state bucket.
@@ -39,13 +39,13 @@ With our environment configured, we can now apply the base compnents necessary f
 1. Create spacelift [spaces](https://docs.spacelift.io/concepts/spaces/) by configuring and applying the [spaces](./spaces/) component.
 
 ```bash
-$ atmos terraform apply spacelift/spaces -s infra-gbl-root
+atmos terraform apply spacelift/spaces -s infra-gbl-root
 ```
 
 2. Create one or more spacelift [worker pools](https://docs.spacelift.io/concepts/worker-pools) by configuring and applying the [worker-pool](./worker-pool/) component.
 
 ```bash
-$ atmos terraform apply spacelift/worker-pool -s core-ue2-auto
+atmos terraform apply spacelift/worker-pool -s core-ue2-auto
 ```
 
 3. Create the root spacelift [stack](https://docs.spacelift.io/concepts/stack/) by configuring and applying the [admin-stack](./admin-stack/) component.
@@ -53,7 +53,7 @@ $ atmos terraform apply spacelift/worker-pool -s core-ue2-auto
 NOTE: Before running this command, make sure all of your code changes to configure these components have been merged to your `main` branch, and you have `main` checked out.
 
 ```bash
-$ atmos terraform apply spacelift/admin-stack -s infra-gbl-root -var "spacelift_run_enabled=true" -var "commit_sha=$(git rev-parse HEAD)"
+atmos terraform apply spacelift/admin-stack -s infra-gbl-root -var "spacelift_run_enabled=true" -var "commit_sha=$(git rev-parse HEAD)"
 ```
 
 Running this command will create the `root` spacelift admin stack, which will, in turn, read your atmos stack config and create all other spacelift admin stacks defined in the config.

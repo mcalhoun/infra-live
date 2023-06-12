@@ -43,15 +43,17 @@ resource "null_resource" "child_stack_parent_precondition" {
 # Get all of the stack configurations from the atmos config that matched the context_filters and create a stack# for
 # each one.
 module "child_stacks_config" {
-  source          = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stacks-from-atmos-config?ref=chore/refactor-module"
+  source  = "cloudposse/cloud-infrastructure-automation/spacelift//modules/spacelift-stacks-from-atmos-config"
+  version = "1.0.0"
+
   context_filters = var.context_filters
 
   context = module.this.context
 }
 
 module "child_stack" {
-  source = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stack?ref=chore/refactor-module"
-  #version = "0.55.0"
+  source  = "cloudposse/cloud-infrastructure-automation/spacelift//modules/spacelift-stack"
+  version = "1.0.0"
 
   for_each = local.child_stacks
   depends_on = [

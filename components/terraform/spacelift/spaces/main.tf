@@ -35,8 +35,8 @@ locals {
 }
 
 module "space" {
-  source = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-space?ref=chore/refactor-module"
-  #version = "0.55.0"
+  source  = "cloudposse/cloud-infrastructure-automation/spacelift//modules/spacelift-space"
+  version = "1.0.0"
 
   # Create a space for each entry in the `spaces` variable, except for the root space which already exists by default
   # and cannot be deleted.
@@ -50,8 +50,8 @@ module "space" {
 }
 
 module "policy" {
-  source = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-policy?ref=chore/refactor-module"
-  #version = "0.55.0"
+  source  = "cloudposse/cloud-infrastructure-automation/spacelift//modules/spacelift-policy"
+  version = "1.0.0"
 
   for_each = local.all_policies_inputs
 

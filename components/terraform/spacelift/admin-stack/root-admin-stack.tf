@@ -2,7 +2,9 @@
 # organization. This stack is denoted by setting the root_administrative property to true in the atmos config. Only one
 # such stack is allowed in the Spacelift organization.
 module "root_admin_stack_config" {
-  source  = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stacks-from-atmos-config?ref=chore/refactor-module"
+  source  = "cloudposse/cloud-infrastructure-automation/spacelift//modules/spacelift-stacks-from-atmos-config"
+  version = "1.0.0"
+
   enabled = local.create_root_admin_stack
 
   context_filters = {
@@ -12,7 +14,9 @@ module "root_admin_stack_config" {
 
 # This gets the atmos stack config for all of the administrative stacks
 module "all_admin_stacks_config" {
-  source  = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stacks-from-atmos-config?ref=chore/refactor-module"
+  source  = "cloudposse/cloud-infrastructure-automation/spacelift//modules/spacelift-stacks-from-atmos-config"
+  version = "1.0.0"
+
   enabled = local.create_root_admin_stack
   context_filters = {
     administrative = true
@@ -20,9 +24,9 @@ module "all_admin_stacks_config" {
 }
 
 module "root_admin_stack" {
-  source = "git::https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git//modules/spacelift-stack?ref=chore/refactor-module"
-  #version = "0.55.0"
-  # https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation.git
+  source  = "cloudposse/cloud-infrastructure-automation/spacelift//modules/spacelift-stack"
+  version = "1.0.0"
+
   enabled    = local.create_root_admin_stack
   depends_on = [null_resource.spaces_precondition, null_resource.workers_precondition]
 
